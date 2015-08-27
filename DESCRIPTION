@@ -1,1 +1,4 @@
-This is a prototype implementation of Bisecting K-Means Clustering on Spark. Bisecting K-Means is like a combination of K-Means and hierarchical clustering.
+This is a prototype implementation of Bisecting K-Means Clustering on Spark.
+
+This is a prototype implementation of Bisecting K-Means Clustering on Spark.
+Bisecting K-Means is like a combination of K-Means and hierarchical clustering.
