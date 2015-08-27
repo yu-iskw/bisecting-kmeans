@@ -52,13 +52,13 @@ object BisectingKMeans extends Logging {
  * M. Steinbach, G. Karypis and V. Kumar. Workshop on Text Mining, KDD, 2000.
  * http://cs.fit.edu/~pkc/classes/ml-internet/papers/steinbach00tr.pdf
  *
- * @param numClusters tne number of clusters you want
+ * @param k tne number of clusters you want
  * @param clusterMap the pairs of cluster and its index as Map
  * @param maxIterations the number of maximal iterations
  * @param seed a random seed
  */
 class BisectingKMeans private(
-  private var numClusters: Int,
+  private var k: Int,
   private var clusterMap: Map[BigInt, BisectingClusterNode],
   private var maxIterations: Int,
   private var seed: Long) extends Logging {
@@ -71,12 +71,12 @@ class BisectingKMeans private(
   /**
    * Sets the number of clusters you want
    */
-  def setNumClusters(numClusters: Int): this.type = {
-    this.numClusters = numClusters
+  def setK(k: Int): this.type = {
+    this.k = k
     this
   }
 
-  def getNumClusters: Int = this.numClusters
+  def getNumClusters: Int = this.k
 
   /**
    * Sets the number of maximal iterations in each clustering step
@@ -118,7 +118,7 @@ class BisectingKMeans private(
     var noMoreDividable = false
     var rddArray = Array.empty[RDD[(BigInt, BV[Double])]]
     // the number of maximum nodes of a binary tree by given parameter
-    val multiplier = math.ceil(math.log10(this.numClusters) / math.log10(2.0)) + 1
+    val multiplier = math.ceil(math.log10(this.k) / math.log10(2.0)) + 1
     val maxAllNodesInTree = math.pow(2, multiplier).toInt
 
     while (clusterStats.size < maxAllNodesInTree && noMoreDividable == false) {
@@ -157,7 +157,7 @@ class BisectingKMeans private(
 
     // build a cluster tree by Map class which is expressed
     log.info(s"Building the cluster tree is started in ${sc.appName}")
-    val root = buildTree(nodes, BisectingKMeans.ROOT_INDEX_KEY, this.numClusters)
+    val root = buildTree(nodes, BisectingKMeans.ROOT_INDEX_KEY, this.k)
     if (root.isEmpty) {
       new SparkException("Failed to build a cluster tree from a Map type of clusterStats")
     }
@@ -169,8 +169,8 @@ class BisectingKMeans private(
     // make a bisecting kmeans model
     val model = new BisectingKMeansModel(root.get)
     val leavesNodes = model.getClusters
-    if (leavesNodes.length < this.numClusters) {
-      log.warn(s"# clusterStats is less than you want: ${leavesNodes.length} / ${numClusters}")
+    if (leavesNodes.length < this.k) {
+      log.warn(s"# clusterStats is less than you want: ${leavesNodes.length} / ${k}")
     }
     model
   }

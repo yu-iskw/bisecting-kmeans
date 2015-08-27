@@ -26,7 +26,7 @@ class BisectingKMeansModelSuite
     extends SparkFunSuite with MLlibTestSparkContext with BeforeAndAfterEach {
 
   test("clustering dense vectors") {
-    val app = new BisectingKMeans().setNumClusters(5).setSeed(1)
+    val app = new BisectingKMeans().setK(5).setSeed(1)
 
     val localData = (1 to 100).toSeq.map { i =>
       val label = i % 5
@@ -87,7 +87,7 @@ class BisectingKMeansModelSuite
   }
 
   test("clustering sparse vectors") {
-    val app = new BisectingKMeans().setNumClusters(5).setSeed(1)
+    val app = new BisectingKMeans().setK(5).setSeed(1)
 
     val localData = (1 to 100).toSeq.map { i =>
       val label = i % 5
@@ -148,7 +148,7 @@ class BisectingKMeansModelSuite
 
   test("clustering should be done correctly") {
     for (numClusters <- Array(9, 19)) {
-      val app = new BisectingKMeans().setNumClusters(numClusters).setSeed(1)
+      val app = new BisectingKMeans().setK(numClusters).setSeed(1)
       val localData = (1 to 19).toSeq.map { i =>
         val label = i % numClusters
         val sparseVector = Vectors.sparse(numClusters, Seq((label, label.toDouble)))
