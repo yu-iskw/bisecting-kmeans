@@ -5,7 +5,7 @@ scalaVersion := "2.10.4"
 
 sparkVersion := "1.4.1"
 
-spName := "ml/bisecting-kmeans"
+spName := "yu-iskw/bisecting-kmeans"
 
 // Don't forget to set the version
 version := "0.0.1"
