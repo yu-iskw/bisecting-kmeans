@@ -8,7 +8,7 @@ sparkVersion := "1.4.1"
 spName := "yu-iskw/bisecting-kmeans"
 
 // Don't forget to set the version
-version := "0.0.1"
+version := "0.1"
 
 // Can't parallelly execute in test
 parallelExecution in Test := false
