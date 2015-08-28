@@ -1,14 +1,26 @@
-// Your sbt build file. Guides on how to write one can be found at
-// http://www.scala-sbt.org/0.13/docs/index.html
+name := "bisecting-kmeans"
 
-scalaVersion := "2.10.4"
+version := "0.1"
+
+scalaVersion := "2.10.5"
+
+crossScalaVersions := Seq("2.10.5", "2.11.7")
 
 sparkVersion := "1.4.1"
 
 spName := "yu-iskw/bisecting-kmeans"
 
-// Don't forget to set the version
-version := "0.1"
+sparkComponents ++= Seq("mllib")
+
+spAppendScalaVersion := true
+
+spIncludeMaven := true
+
+spIgnoreProvided := true
+
+val testSparkVersion = settingKey[String]("The version of Spark to test against.")
+
+testSparkVersion := sys.props.getOrElse("spark.testVersion", sparkVersion.value)
 
 // Can't parallelly execute in test
 parallelExecution in Test := false
@@ -18,9 +30,9 @@ licenses := Seq("Apache-2.0" -> url("http://opensource.org/licenses/Apache-2.0")
 
 libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "2.1.5" % "test",
-  "org.apache.spark" %% "spark-core" % "1.4.1",
-  "org.apache.spark" %% "spark-mllib" % "1.4.1",
-  "org.scalanlp" % "breeze_2.10" % "0.11.2"
+  "org.scalanlp" % "breeze_2.10" % "0.11.2",
+  "org.apache.spark" %% "spark-core" % testSparkVersion.value,
+  "org.apache.spark" %% "spark-mllib" % testSparkVersion.value
 )
 
 resolvers ++= Seq(
@@ -46,11 +58,7 @@ mergeStrategy in assembly := {
   case _ => MergeStrategy.first
 }
 
-// Add Spark components this package depends on, e.g, "mllib", ....
-// sparkComponents ++= Seq("sql", "mllib")
-
-// uncomment and change the value below to change the directory where your zip artifact will be created
-// spDistDirectory := target.value
-
-// add any Spark Package dependencies using spDependencies.
-// e.g. spDependencies += "databricks/spark-avro:0.1"
+ScoverageSbtPlugin.ScoverageKeys.coverageHighlighting := {
+  if (scalaBinaryVersion.value == "2.10") false
+  else true
+}
