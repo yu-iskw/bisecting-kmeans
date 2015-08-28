@@ -4,6 +4,9 @@ This is a prototype implementation of Bisecting K-Means Clustering on Spark.
 Bisecting K-Means is like a combination of K-Means and hierarchical clustering.
 
 [![Build Status](https://travis-ci.org/yu-iskw/bisecting-kmeans.svg)](https://travis-ci.org/yu-iskw/bisecting-kmeans)
+[![License](http://img.shields.io/:license-Apache%202-red.svg)](http://www.apache.org/licenses/LICENSE-2.0.txt)
+[![codecov.io](http://codecov.io/github/yu-iskw/bisecting-kmeans/coverage.svg?branch=master)](http://codecov.io/github/yu-iskw/bisecting-kmeans?branch=master)
+
 
 ### Scala API
 
