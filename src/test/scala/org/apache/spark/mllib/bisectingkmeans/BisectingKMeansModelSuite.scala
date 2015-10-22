@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.spark.mllib.bisectingkmeans
 
-import org.scalatest.BeforeAndAfterEach
+package org.apache.spark.mllib.bisectingkmeans
 
 import org.apache.spark.SparkFunSuite
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.util.MLlibTestSparkContext
+import org.scalatest.BeforeAndAfterEach
 
 class BisectingKMeansModelSuite
     extends SparkFunSuite with MLlibTestSparkContext with BeforeAndAfterEach {

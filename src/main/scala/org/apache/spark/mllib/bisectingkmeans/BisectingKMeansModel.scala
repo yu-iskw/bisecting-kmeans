@@ -14,13 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.apache.spark.mllib.bisectingkmeans
 
 import breeze.linalg.{Vector => BV, norm => breezeNorm}
-
 import org.apache.spark.Logging
+import org.apache.spark.annotation.Since
 import org.apache.spark.api.java.JavaRDD
-import org.apache.spark.mllib.linalg.{Vector, Vectors}
+import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.rdd.RDD
 
 /**
@@ -28,15 +29,21 @@ import org.apache.spark.rdd.RDD
  *
  * @param node a cluster as a tree node
  */
-class BisectingKMeansModel(val node: BisectingClusterNode) extends Serializable with Logging {
+@Since("1.6.0")
+class BisectingKMeansModel @Since("1.6.0") (
+    @Since("1.6.0") val node: BisectingClusterNode
+  ) extends Serializable with Logging {
 
+  @Since("1.6.0")
   def getClusters: Array[BisectingClusterNode] = this.node.getLeavesNodes
 
+  @Since("1.6.0")
   def getCenters: Array[Vector] = this.getClusters.map(_.center)
 
   /**
    * Predicts the closest cluster by one point
    */
+  @Since("1.6.0")
   def predict(vector: Vector): Int = {
     // TODO Supports distance metrics other Euclidean distance metric
     val metric = (bv1: BV[Double], bv2: BV[Double]) => breezeNorm(bv1 - bv2, 2.0)
@@ -48,6 +55,7 @@ class BisectingKMeansModel(val node: BisectingClusterNode) extends Serializable 
   /**
    * Predicts the closest cluster by RDD of the points
    */
+  @Since("1.6.0")
   def predict(data: RDD[Vector]): RDD[Int] = {
     val sc = data.sparkContext
 
@@ -65,12 +73,14 @@ class BisectingKMeansModel(val node: BisectingClusterNode) extends Serializable 
   /**
    * Predicts the closest cluster by RDD of the points for Java
    */
+  @Since("1.6.0")
   def predict(points: JavaRDD[Vector]): JavaRDD[java.lang.Integer] =
     predict(points.rdd).toJavaRDD().asInstanceOf[JavaRDD[java.lang.Integer]]
 
   /**
    * Computes Within Set Sum of Squared Error(WSSSE)
    */
+  @Since("1.6.0")
   def WSSSE(data: RDD[Vector]): Double = {
     val bvCenters = this.getCenters.map(_.toBreeze)
     data.context.broadcast(bvCenters)
@@ -85,11 +95,14 @@ class BisectingKMeansModel(val node: BisectingClusterNode) extends Serializable 
     distances.sum()
   }
 
+  @Since("1.6.0")
   def WSSSE(data: JavaRDD[Vector]): Double = this.WSSSE(data.rdd)
 
+  @Since("1.6.0")
   def toAdjacencyList: Array[(Int, Int, Double)] = this.node.toAdjacencyList
 
   /** Since Java doesn't support tuple, we must support the data structure for java and py4j. */
+  @Since("1.6.0")
   def toJavaAdjacencyList: java.util.ArrayList[java.util.ArrayList[java.lang.Double]] = {
     val javaList = new java.util.ArrayList[java.util.ArrayList[java.lang.Double]]()
     this.node.toAdjacencyList.foreach { x =>
@@ -102,9 +115,11 @@ class BisectingKMeansModel(val node: BisectingClusterNode) extends Serializable 
     javaList
   }
 
+  @Since("1.6.0")
   def toLinkageMatrix: Array[(Int, Int, Double, Int)] = this.node.toLinkageMatrix
 
   /** Since Java doesn't support tuple, we must support the data structure for java and py4j. */
+  @Since("1.6.0")
   def toJavaLinkageMatrix: java.util.ArrayList[java.util.ArrayList[java.lang.Double]] = {
     val javaList = new java.util.ArrayList[java.util.ArrayList[java.lang.Double]]()
     this.node.toLinkageMatrix.foreach {x =>
