@@ -9,8 +9,8 @@ In this post, we highlight the bisecting k-means clustering in MLlib.
 
 In general, there are two strategies for hierarchical clustering:
 
-- Agglomerative: This is a "bottom up" approach: each observation starts in its own cluster, and pairs of clusters are merged as one moves up the hierarchy.
-- Divisive: This is a "top down" approach: all observations start in one cluster, and splits are performed recursively as one moves down the hierarchy.
+- **Agglomerative**: This is a "bottom up" approach: each observation starts in its own cluster, and pairs of clusters are merged as one moves up the hierarchy.
+- **Divisive**: This is a "top down" approach: all observations start in one cluster, and splits are performed recursively as one moves down the hierarchy.
 
 Bisecting k-means is a divisive hierarchical clustering.
 Actually, a top-down clustering method and is less commonly used.
@@ -18,9 +18,9 @@ However, it is difficult to implement a agglomerative approach on a shared-nothi
 So, we implement it as a divisive approach.
 
 The algorithm starts from a single cluster that contains all points.
-Iteratively it finds divisible clusters on the bottom level and bisects each of them using k-means, until there are `k` leaf clusters in total or no leaf clusters are divisible.
+Iteratively it finds divisible clusters on the bottom level and bisects each of them using k-means, until there are *k* leaf clusters in total or no leaf clusters are divisible.
 The bisecting steps of clusters on the same level are grouped together to increase parallelism.
-If bisecting all divisible clusters on the bottom level would result more than `k` leaf clusters, larger clusters get higher priority.
+If bisecting all divisible clusters on the bottom level would result more than *k* leaf clusters, larger clusters get higher priority.
 
 When assigning a point to a cluster, it starts with comparing the point with the children cluster centers of the root cluster node.
 And again, it is compared with the children cluster centers of the closest child of the root.
@@ -33,15 +33,15 @@ Finally, a point will be assigned to the closest leaf cluster node.
 
 The bisecting k-means in MLlib currently has 4 parameters:
 
-* `k`: the desired number of leaf clusters. The actual number could be smaller if there are no divisible leaf clusters.
-* `maxIterations`: the max number of k-means iterations to split clusters.
-* `minDivisibleClusterSize`: the minimum number of points (if >= 1.0) or the minimum proportion of points (if < 1.0) of a divisible cluster.
-* `seed`: a random seed.
+* *k*: the desired number of leaf clusters. The actual number could be smaller if there are no divisible leaf clusters.
+* *maxIterations*: the max number of k-means iterations to split clusters.
+* *minDivisibleClusterSize*: the minimum number of points (if >= 1.0) or the minimum proportion of points (if < 1.0) of a divisible cluster.
+* *seed*: a random seed.
 
 In general, hierarchical clustering does not require us to prespecify the number of clusters and most hierarchical algorithms that have been used in IR are deterministic.
 Since it's hard to hold a hierarchy of massive data points, we have a parameter to set the end condition of the clustering.
 And as a result of the clustering, a dendrogram should have all points as leaf nodes.
-Because of the same reason, we provide `minDivisibleClusterSize` for a parameter to define a condition to stop splitting.
+Because of the same reason, we provide *minDivisibleClusterSize* for a parameter to define a condition to stop splitting.
 
 ```
 import org.apache.spark.mllib.clustering.BisectingKMeans
