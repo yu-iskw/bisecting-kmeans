@@ -27,7 +27,7 @@ And again, it is compared with the children cluster centers of the closest child
 It is going to continue until it reaches any leaf cluster node.
 Finally, a point will be assigned to the closest leaf cluster node.
 
-![bisecting-kmenas-image](./figs/bisecting-kmeans-images_640x.png)
+![bisecting-kmenas-image](./figs/bisecting-kmeans-images_720x.png)
 
 # A Code Example
 
