@@ -2,7 +2,7 @@ Introducing Bisecting Kmeans in MLlib
 
 The latest released Apache Spark 1.6 introduced a distributed bisecting k-means clustering algorithm ([SPARK-6517](https://issues.apache.org/jira/browse/SPARK-6517)) which is a kind of hierarchical clustering algorithm.
 Hierarchical clustering algorithm is one of the most widely used clustering algorithms.
-Its outputs a hierarchy, a structure that is more informative than the unstructured set of clusters returned by flat clustering like k-means clustering.
+It outputs a hierarchy, a structure that is more informative than the unstructured set of clusters returned by flat clustering like k-means clustering.
 In this post, we highlight the bisecting k-means clustering in MLlib.
 
 ## Bisecting k-means
@@ -23,7 +23,7 @@ The bisecting steps of clusters on the same level are grouped together to increa
 If bisecting all divisible clusters on the bottom level would result more than `k` leaf clusters, larger clusters get higher priority.
 
 When assigning a point to a cluster, it starts with comparing the point with the children cluster centers of the root cluster node.
-And again it is compared with the children cluster centers of the closest child of the root.
+And again, it is compared with the children cluster centers of the closest child of the root.
 It is going to continue until it reaches any leaf cluster node.
 Finally, a point will be assigned to the closest leaf cluster node.
 
@@ -31,7 +31,7 @@ Finally, a point will be assigned to the closest leaf cluster node.
 
 # A Code Example
 
-The bisecting k-means in MLlib currently has 4 paramters:
+The bisecting k-means in MLlib currently has 4 parameters:
 
 * `k`: the desired number of leaf clusters. The actual number could be smaller if there are no divisible leaf clusters.
 * `maxIterations`: the max number of k-means iterations to split clusters.
@@ -40,8 +40,8 @@ The bisecting k-means in MLlib currently has 4 paramters:
 
 In general, hierarchical clustering does not require us to prespecify the number of clusters and most hierarchical algorithms that have been used in IR are deterministic.
 Since it's hard to hold a hierarchy of massive data points, we have a parameter to set the end condition of the clustering.
-And as a result of the clustering, a dendrogram should have all points as leave nodes.
-Because of the same reason, we provide `minDivisibleClusterSize` for a paramter to define a condition to stop splitting.
+And as a result of the clustering, a dendrogram should have all points as leaf nodes.
+Because of the same reason, we provide `minDivisibleClusterSize` for a parameter to define a condition to stop splitting.
 
 ```
 import org.apache.spark.mllib.clustering.BisectingKMeans
